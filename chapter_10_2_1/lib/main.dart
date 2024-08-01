@@ -20,6 +20,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// 画面遷移のためにNavigatorStateクラスを取得する以下の処理は
+    /// ウィジェットの階層によっては計算量の大きな処理になる
+    /// 不要な際は呼ばれないようにするためにも、
+    /// 「ボタンがタップされた時」などのイベントに紐付けて呼ばれるべき
     // final navigator = Navigator.of(context);
 
     return Scaffold(
