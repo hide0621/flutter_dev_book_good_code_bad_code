@@ -11,6 +11,14 @@ void main() {
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  /// アンチパターン
+  /// buildメソッドの中でconst修飾子が付与されていないウィジェットがある
+  ///
+  /// const修飾子が付与されたウィジェットはコンパイル時定数なので常に同じインスタンスになり、
+  /// buildメソッドが実行されてもそのウィジェットは再構築されない（これによりメモリ効率が良くなる）
+  ///
+  /// ただしconst修飾子が付与されたウィジェットは表示内容を更新できないかと言うとそうではない（StatefulWidget、InheritedWidgetを使った場合）
+  /// const修飾子はそのウィジェットを更新不可にするのではなく、先祖の更新の影響を受けなくなる、という効果がある
   @override
   Widget build(BuildContext context) {
     return Column(
