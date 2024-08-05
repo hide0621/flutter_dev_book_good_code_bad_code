@@ -8,87 +8,73 @@ void main() {
   );
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  /// アンチパターン
-  /// buildメソッドの中でconst修飾子が付与されていないウィジェットがある
-  ///
-  /// const修飾子が付与されたウィジェットはコンパイル時定数なので常に同じインスタンスになり、
-  /// buildメソッドが実行されてもそのウィジェットは再構築されない（これによりメモリ効率が良くなる）
-  ///
-  /// ただしconst修飾子が付与されたウィジェットは表示内容を更新できないかと言うとそうではない（StatefulWidget、InheritedWidgetを使った場合）
-  /// const修飾子はそのウィジェットを更新不可にするのではなく、先祖の更新の影響を受けなくなる、という効果がある
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        A(
-          child: Text('A'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            /// ベストプラクティス
+            /// ウィジェットは出来るだけconstantコンストラクタで実装して構築されるべきなので、
+            /// 以下のようにウィジェットクラスをカスタムしてconstantコンストラクタで実装することが推奨される
+            const ColoredText(
+              text: 'You have pushed the button\nthis many times:',
+              color: Colors.blueGrey,
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
         ),
-        B(
-          child: Text('B'),
-        ),
-        const C(
-          child: Text('C'),
-        ),
-      ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
 
-class A extends StatelessWidget {
-  const A({super.key, required this.child});
+/// ベストプラクティス
+/// ウィジェットは出来るだけconstantコンストラクタで実装して構築されるべきなので、
+/// 以下のようにウィジェットクラスをカスタムしてconstantコンストラクタで実装することが推奨される
+class ColoredText extends StatelessWidget {
+  const ColoredText({super.key, required this.text, required this.color});
 
-  final Widget child;
-
-  /// アンチパターン
-  /// const修飾子が使えるパターンがあれば、それを採用するべき
-  ///
-  /// 以下のContainerウィジェットはconstantコンストラクタを持っていないので
-  /// 同様の実装ができ、かつ、constantコンストラクタを持っているColoredBoxウィジェットを使うべき
-  ///
-  /// ただし、以下のベストプラクティスを実装すると、コンパイル時定数と実行時定数が混在している（コンストラクタはコンパイル時定数、childは実行時定数）ので、エラーになる
-  /// なので、こだわりすぎるのもダメ
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: child,
-    );
-
-    /// ベストプラクティス
-    // return const ColoredBox(
-    //   color: Colors.red,
-    //   child: child,
-    // );
-  }
-}
-
-class B extends StatelessWidget {
-  const B({super.key, required this.child});
-
-  final Widget child;
+  final String text;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      child: child,
-    );
-  }
-}
-
-class C extends StatelessWidget {
-  const C({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-      child: child,
+    print('ColoredText build');
+    return ColoredBox(
+      color: color,
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
     );
   }
 }
