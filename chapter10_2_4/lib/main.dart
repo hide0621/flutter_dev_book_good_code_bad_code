@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  /// バッドコード
+  /// アンチパターン
   /// ボタンタップの度にScaffoldウィジェットやAppBarウィジェットも再構築されてしまう
   /// 状態更新があった際に、その状態とは関係のないウィジェットまで再構築されることは避けるべき
   @override
