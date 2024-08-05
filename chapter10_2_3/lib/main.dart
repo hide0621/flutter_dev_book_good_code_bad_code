@@ -42,12 +42,26 @@ class A extends StatelessWidget {
 
   final Widget child;
 
+  /// アンチパターン
+  /// const修飾子が使えるパターンがあれば、それを採用するべき
+  ///
+  /// 以下のContainerウィジェットはconstantコンストラクタを持っていないので
+  /// 同様の実装ができ、かつ、constantコンストラクタを持っているColoredBoxウィジェットを使うべき
+  ///
+  /// ただし、以下のベストプラクティスを実装すると、コンパイル時定数と実行時定数が混在している（コンストラクタはコンパイル時定数、childは実行時定数）ので、エラーになる
+  /// なので、こだわりすぎるのもダメ
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.red,
       child: child,
     );
+
+    /// ベストプラクティス
+    // return const ColoredBox(
+    //   color: Colors.red,
+    //   child: child,
+    // );
   }
 }
 
