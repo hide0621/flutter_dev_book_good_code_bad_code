@@ -1,6 +1,18 @@
 # chapter10_2_5
 
-A new Flutter project.
+## Riverpodのコード生成とLinterのパッケージ導入について
+
+以下のコマンドで必要なパッケージを導入してください。
+
+`flutter pub add flutter_riverpod riverpod_annotation`
+
+`flutter pub add --dev riverpod_generator build_runner custom_lint riverpod_lint `
+
+## コード生成のコマンド
+
+以下のコマンドでコード生成を行います。
+
+`flutter packages pub run build_runner build`
 
 ## Getting Started
 
