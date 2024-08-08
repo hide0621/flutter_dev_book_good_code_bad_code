@@ -14,6 +14,12 @@
 
 `flutter packages pub run build_runner build`
 
+なお、コード生成に失敗する際は、
+
+`import 'package:riverpod_annotation/riverpod_annotation.dart';`
+
+このパッケージインポートがなされているか、確認してください。
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
