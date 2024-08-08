@@ -30,11 +30,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Home Screen'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               'You have pushed the button this many times:',
             ),
 
@@ -42,10 +42,12 @@ class HomeScreen extends ConsumerWidget {
             ///
             /// 状態監視をしてその更新が確認される度にTextウィジェットも再構築される
             /// つまり、このTextウィジェットの再描画のためにHomeScreenウィジェットのbuildメソッドも再実行されるので効率が悪い
-            Text(
-              '${ref.watch(counterProvider)}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            )
+            //
+
+            /// ベストプラクティス
+            /// CountTextウィジェットを作成し、そのウィジェット内で状態[counter]を監視する
+            /// こうすることで、CountTextウィジェットの状態更新時には、CountTextウィジェットのみが再構築される
+            CountText(),
           ],
         ),
       ),
@@ -54,6 +56,19 @@ class HomeScreen extends ConsumerWidget {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class CountText extends ConsumerWidget {
+  const CountText({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final counter = ref.watch(counterProvider);
+    return Text(
+      '$counter',
+      style: Theme.of(context).textTheme.headlineMedium,
     );
   }
 }
